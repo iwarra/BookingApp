@@ -8,20 +8,52 @@ using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
 using BookingApp.Models;
 using BookingApp.Models.ViewModels;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookingApp.Controllers
 {
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public GymClassesController(ApplicationDbContext context)
+        public GymClassesController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
-        // GET: GymClasses
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> BookingToggle(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var userId = _userManager.GetUserId(User);
+            var isAttending = await _context.ApplicationUserGymClasses.FindAsync(userId, id);
+
+            if (isAttending == null)
+            {
+                var booking = new ApplicationUserGymClass
+                {
+                    ApplicationUserId = userId,
+                    GymClassId = (int)id
+                };
+                _context.ApplicationUserGymClasses.Add(booking);
+            }
+            else
+            {
+                _context.ApplicationUserGymClasses.Remove(isAttending);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction(nameof(Index));
+        }
+
+            // GET: GymClasses
+            public async Task<IActionResult> Index()
         {
             return View(await _context.GymClasses.ToListAsync());
         }
