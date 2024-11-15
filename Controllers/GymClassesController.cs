@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingApp.Data;
 using BookingApp.Models;
+using BookingApp.Models.ViewModels;
 
 namespace BookingApp.Controllers
 {
@@ -54,15 +55,23 @@ namespace BookingApp.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,StartTime,Duration,Description")] GymClass gymClass)
+        public async Task<IActionResult> Create(CreateGymClassViewModel viewModel)
         {
             if (ModelState.IsValid)
             {
+                var gymClass = new GymClass
+                {
+                    Name = viewModel.Name,
+                    StartTime = viewModel.StartTime,
+                    Duration = viewModel.Duration,
+                    Description = viewModel.Description
+                };
+
                 _context.Add(gymClass);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(gymClass);
+            return View(viewModel);
         }
 
         // GET: GymClasses/Edit/5

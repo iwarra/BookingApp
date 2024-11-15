@@ -1,9 +1,12 @@
-﻿namespace BookingApp.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace BookingApp.Models
 {
     public class GymClass
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        [Display(Name = "Starts at")]
         public DateTime StartTime { get; set; } 
         public TimeSpan Duration { get; set; }
         public DateTime EndTime { get { return StartTime + Duration; } }
