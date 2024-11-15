@@ -31,7 +31,7 @@ namespace BookingApp.Controllers
             }
 
             var userId = _userManager.GetUserId(User);
-            var isAttending = await _context.ApplicationUserGymClasses.FindAsync(userId, id);
+            var isAttending = await _context.ApplicationUserGymClasses.FindAsync(id, userId);
 
             if (isAttending == null)
             {
@@ -44,7 +44,7 @@ namespace BookingApp.Controllers
             }
             else
             {
-                _context.ApplicationUserGymClasses.Remove(isAttending);
+                _context.Remove(isAttending);
             }
 
             await _context.SaveChangesAsync();
