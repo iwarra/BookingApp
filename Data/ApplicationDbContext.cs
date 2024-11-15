@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using BookingApp.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookingApp.Data
@@ -9,5 +10,7 @@ namespace BookingApp.Data
             : base(options)
         {
         }
+
+        public DbSet<GymClass> GymClasses { get; set; } = default!;
     }
 }
