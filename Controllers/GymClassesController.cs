@@ -9,9 +9,11 @@ using BookingApp.Data;
 using BookingApp.Models;
 using BookingApp.Models.ViewModels;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookingApp.Controllers
 {
+    [Authorize]
     public class GymClassesController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -52,8 +54,9 @@ namespace BookingApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-            // GET: GymClasses
-            public async Task<IActionResult> Index()
+        [AllowAnonymous]
+        // GET: GymClasses
+        public async Task<IActionResult> Index()
         {
             return View(await _context.GymClasses.ToListAsync());
         }
