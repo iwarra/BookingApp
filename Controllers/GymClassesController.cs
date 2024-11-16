@@ -73,7 +73,17 @@ namespace BookingApp.Controllers
 
             if (gymClassWithAttendees == null) return NotFound();
 
-            return View(gymClassWithAttendees);
+            var viewModel = new DetailsGymClassViewModel
+            {
+                Id = gymClassWithAttendees.Id,
+                Name = gymClassWithAttendees.Name,
+                StartTime = gymClassWithAttendees.StartTime,
+                Duration = gymClassWithAttendees.Duration,
+                Description = gymClassWithAttendees.Description,
+                AttendeesEmails = gymClassWithAttendees.AttendingUsers.Select(a => a.User.Email).ToList()
+            };
+
+            return View(viewModel);
         }
 
         // GET: GymClasses/Create
