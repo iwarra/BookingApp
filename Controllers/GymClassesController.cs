@@ -66,14 +66,14 @@ namespace BookingApp.Controllers
                 return NotFound();
             }
 
-            var gymClass = await _context.GymClasses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (gymClass == null)
-            {
-                return NotFound();
-            }
+            var gymClassWithAttendees = await _context.GymClasses
+               .Where(g => g.Id == id)
+               .Include(c => c.AttendingUsers)
+               .ThenInclude(u => u.User).FirstOrDefaultAsync();
 
-            return View(gymClass);
+            if (gymClassWithAttendees == null) return NotFound();
+
+            return View(gymClassWithAttendees);
         }
 
         // GET: GymClasses/Create
